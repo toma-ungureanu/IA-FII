@@ -76,7 +76,7 @@ public class Solver
         }
         else if(this.strategy instanceof IDDFSStrategy)
         {
-
+            this.strategy.applyStrategy(this.state, null);
         }
     }
 

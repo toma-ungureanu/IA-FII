@@ -54,7 +54,7 @@ public class BKTStrategy implements IStrategy
         return null;
     }
 
-    private ArrayList<State> getNextPossibleStates(State state)
+    public ArrayList<State> getNextPossibleStates(State state)
     {
         int boatCapacity = state.getBoatCapacity();
         int shore = state.getShore();

@@ -17,6 +17,6 @@ public class Main
         Solver solver = new Solver(state, randomStrat);
         //solver.solve();
         //solver.solve(state, bktStrat);
-        //solver.solve(state, iddfsStrat);
+        solver.solve(state, iddfsStrat);
     }
 }
