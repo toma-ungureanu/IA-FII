@@ -2,6 +2,7 @@ package strategies;
 
 import org.jetbrains.annotations.NotNull;
 import state.State;
+import state.StateNode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,8 +12,9 @@ import java.util.List;
  */
 public class IDDFSStrategy implements IStrategy
 {
-    private List<State> allStates = new ArrayList<State>();
+    private List<State> allStates = new ArrayList<>();
     private List<StateNode> allNodes = new ArrayList<>();
+    private ArrayList<State> solution = new ArrayList<>();
 
     public ArrayList<Integer> applyStrategy(State state,  ArrayList<State> states)
     {
@@ -34,6 +36,7 @@ public class IDDFSStrategy implements IStrategy
             }
         }
         //apply strategy
+        states.addAll(this.solution);
         ArrayList<Integer> returnArray = new ArrayList<>();
         returnArray.add(missionaries);
         returnArray.add(cannibals);
@@ -45,7 +48,6 @@ public class IDDFSStrategy implements IStrategy
     {
         for(int depth = 0; depth < maxDepth; depth++)
         {
-            System.out.println("\n/////////// depth = " + depth + " ///////////");
             if(DLS(node, finalState, depth))
             {
                 return true;
@@ -56,9 +58,13 @@ public class IDDFSStrategy implements IStrategy
 
     private boolean DLS(@NotNull StateNode node, @NotNull StateNode finalState, int depth)
     {
-        System.out.println(node.getCurrentState() + ", ");
         if(node.getCurrentState().equals(finalState.getCurrentState()))
         {
+            while(node.getParentNode() != null)
+            {
+                this.solution.add(node.getCurrentState());
+                node = node.getParentNode();
+            }
             return true;
         }
 

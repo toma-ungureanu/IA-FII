@@ -3,50 +3,33 @@ package strategies;
 import org.jetbrains.annotations.NotNull;
 import state.State;
 import state.StateNode;
+import state.StateNodeHeuristic;
+import utils.Heuristic;
 import utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author Toma-Florin Ungureanu
- */
-public class BKTStrategy implements IStrategy
+public class AStarStrategy implements IStrategy
 {
     private List<State> allStates = new ArrayList<>();
-    private List<StateNode> allNodes = new ArrayList<>();
+    private List<StateNodeHeuristic> allNodes = new ArrayList<>();
     private State finalState;
 
-    public ArrayList<Integer> applyStrategy(State state,  ArrayList<State> states)
+    @Override
+    public ArrayList<Integer> applyStrategy(State state, ArrayList<State> states)
     {
         this.finalState = new State(state.getBoatCapacity(), 0, 0, 2, state.getCannibals(),
                 state.getMissionaries());
 
         allStates.add(state);
-        StateNode parentNode = new StateNode();
+        StateNodeHeuristic parentNode = new StateNodeHeuristic();
         allNodes.add(parentNode);
         parentNode.setCurrentState(state);
         recurse(parentNode);
+        Heuristic heuristic = new Heuristic();
+        heuristic.firstH(parentNode);
 
-        StateNode lastNode = new StateNode();
-        for(StateNode stateNode: allNodes)
-        {
-            if(stateNode.getCurrentState().equals(this.finalState))
-            {
-                lastNode = stateNode;
-                break;
-            }
-        }
-
-        if(!(lastNode.getCurrentState() == null || lastNode.getParentNode() == null))
-        {
-            while (lastNode.getParentNode() != null)
-            {
-                states.add(lastNode.getCurrentState());
-                lastNode = lastNode.getParentNode();
-            }
-            states.add(parentNode.getCurrentState());
-        }
         return null;
     }
 
@@ -82,7 +65,7 @@ public class BKTStrategy implements IStrategy
         return possibilities;
     }
 
-    private boolean recurse(StateNode parentNode)
+    private boolean recurse(StateNodeHeuristic parentNode)
     {
         if(this.allStates.contains(this.finalState))
         {
@@ -94,7 +77,7 @@ public class BKTStrategy implements IStrategy
         {
             if(!allStates.contains(possibility))
             {
-                StateNode newNode = new StateNode(possibility, parentNode);
+                StateNodeHeuristic newNode = new StateNodeHeuristic(possibility, parentNode);
                 parentNode.getChildNodes().add(newNode);
                 allStates.add(possibility);
                 allNodes.add(newNode);
@@ -103,4 +86,5 @@ public class BKTStrategy implements IStrategy
         }
         return true;
     }
+
 }
