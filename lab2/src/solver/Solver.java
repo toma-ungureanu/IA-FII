@@ -1,11 +1,13 @@
 package solver;
 import org.jetbrains.annotations.Contract;
 import state.State;
+import state.StateNodeHeuristic;
 import strategies.*;
 import utils.Utils;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * @author Toma-Florin Ungureanu
@@ -73,6 +75,15 @@ public class Solver
             if(!states.isEmpty())
             {
                 Collections.reverse(states);
+            }
+
+            ArrayList<StateNodeHeuristic> sndList = (ArrayList<StateNodeHeuristic>) ((AStarStrategy) this.strategy)
+                    .getAllNodes();
+
+            StateNodeHeuristic size = Collections.max(sndList, Comparator.comparingLong(StateNodeHeuristic::getValue));
+            for(int i = 0; i < size.getValue(); i++)
+            {
+                states.add(sndList.get(i).getCurrentState());
             }
         }
         return states;

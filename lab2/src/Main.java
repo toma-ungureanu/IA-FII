@@ -28,10 +28,12 @@ public class Main
         ArrayList<Duration> randomTimeStats = new ArrayList<>();
         ArrayList<Duration> bktTimeStats = new ArrayList<>();
         ArrayList<Duration> iddfsTimeStats = new ArrayList<>();
+        ArrayList<Duration> aStarTimeStats = new ArrayList<>();
 
         ArrayList<Integer> randomTransitionStats = new ArrayList<>();
         ArrayList<Integer> bktTransitionStats = new ArrayList<>();
         ArrayList<Integer> iddfsTransitionStats = new ArrayList<>();
+        ArrayList<Integer> aStarTransitionStats = new ArrayList<>();
 
         int instances = 1000;
         for (int i = 0; i < instances; i++)
@@ -71,15 +73,16 @@ public class Main
             //A* solve
             StopWatch.start();
             aStarSolver = new Solver(state, aStarStrat);
-            iddfsTransitionStats.add(iddfsSolver.solve().size());
-            iddfsTimeStats.add(StopWatch.stop());
+            aStarTransitionStats.add(aStarSolver.solve().size());
+            aStarTimeStats.add(StopWatch.stop());
         }
 
         System.out.println("//////////////// TIME ////////////////");
         for (int i = 0; i < instances; i++)
         {
             System.out.println("\nInstance " + (i + 1) + ":");
-            System.out.println("Random: " + randomTimeStats.get(i) + " || BKT: " + bktTimeStats.get(i) + " || IDDFS: " + iddfsTimeStats.get(i));
+            System.out.println("Random: " + randomTimeStats.get(i) + " || BKT: " + bktTimeStats.get(i) + " || IDDFS: "
+                    + iddfsTimeStats.get(i) + " || A*: " + aStarTimeStats.get(i));
         }
         System.out.println();
         System.out.println("//////////////// TRANSITIONS ////////////////");
@@ -87,7 +90,7 @@ public class Main
         {
             System.out.println("\nInstance " + (i + 1) + ":");
             System.out.println("Random: " + randomTransitionStats.get(i) + " || BKT: " + bktTransitionStats.get(i) +
-                    " || IDDFS: " + iddfsTransitionStats.get(i));
+                    " || IDDFS: " + iddfsTransitionStats.get(i) + " || A*: " + aStarTransitionStats.get(i));
         }
 
         System.out.println("\n//////////////// STATISTICS ////////////////");
@@ -98,13 +101,15 @@ public class Main
         allTimeStats.add(randomTimeStats);
         allTimeStats.add(bktTimeStats);
         allTimeStats.add(iddfsTimeStats);
+        allTimeStats.add(aStarTimeStats);
 
         ArrayList<ArrayList<Integer>> allTransitionStats = new ArrayList<>();
         allTransitionStats.add(randomTransitionStats);
         allTransitionStats.add(bktTransitionStats);
         allTransitionStats.add(iddfsTransitionStats);
+        allTransitionStats.add(aStarTransitionStats);
 
-        for(int i = 0; i < 3; i++)
+        for(int i = 0; i < 4; i++)
         {
             statisticsGenerator.setDurations(allTimeStats.get(i));
             statisticsGenerator.setTransitions(allTransitionStats.get(i));
@@ -118,6 +123,9 @@ public class Main
                     break;
                 case 2:
                     System.out.print("\nIDDFS: ");
+                    break;
+                case 3:
+                    System.out.print("\nA*: ");
                     break;
                 default:
                     break;

@@ -11,6 +11,17 @@ public class StateNodeHeuristic
     private StateNodeHeuristic parentNode;
     private ArrayList<StateNodeHeuristic> childNodes;
     private int value;
+    private int distance;
+
+    public int getDistance()
+    {
+        return distance;
+    }
+
+    public void setDistance(int distance)
+    {
+        this.distance = distance;
+    }
 
     public int getValue()
     {

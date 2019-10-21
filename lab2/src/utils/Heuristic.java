@@ -1,13 +1,11 @@
 package utils;
 
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import state.StateNode;
 import state.StateNodeHeuristic;
 
 public class Heuristic
 {
-    private int value;
+    private double value;
 
     @Contract(pure = true)
     public Heuristic(){}
@@ -32,7 +30,7 @@ public class Heuristic
             for (StateNodeHeuristic stateNode : rootNode.getChildNodes())
             {
                 stateNode.setValue((stateNode.getCurrentState().getMissionaries() +
-                        stateNode.getCurrentState().getCannibals()));
+                        stateNode.getCurrentState().getCannibals())/stateNode.getCurrentState().getBoatCapacity());
 
                 firstH(stateNode);
             }
@@ -69,4 +67,34 @@ public class Heuristic
 
         return true;
     }
+
+    /**
+     * This function will go through each node and assign cannibals + missionaries value
+     * We assume that the final state exists in the tree
+     * @param rootNode the root node of the tree. We have access to the tree from here
+     */
+    public boolean thirdH(StateNodeHeuristic rootNode)
+    {
+        if(rootNode == null)
+        {
+            return false;
+        }
+
+        rootNode.setValue(rootNode.getCurrentState().getMissionaries() +
+                rootNode.getCurrentState().getCannibals());
+
+        if(rootNode.getChildNodes() != null)
+        {
+            for (StateNodeHeuristic stateNode : rootNode.getChildNodes())
+            {
+                stateNode.setValue(100/(stateNode.getCurrentState().getMissionariesAcross() +
+                        stateNode.getCurrentState().getCannibalsAcross()));
+
+                thirdH(stateNode);
+            }
+        }
+
+        return true;
+    }
+
 }
